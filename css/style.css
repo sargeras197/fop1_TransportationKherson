@@ -344,6 +344,29 @@ button { font: inherit; }
 
 .section-heading { max-width: 820px; margin-bottom: 42px; }
 
+.about-content {
+  max-width: 820px;
+  display: grid;
+  gap: 18px;
+}
+
+.about-content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--muted);
+  padding: 20px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(15, 76, 129, 0.06);
+  box-shadow: 0 12px 32px rgba(15, 76, 129, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-content p:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(15, 76, 129, 0.08);
+}
+
 .section-heading h2,
 .cta-box h2,
 .contact-info h2 { font-size: clamp(2.1rem, 4vw, 3.6rem); }

@@ -116,4 +116,72 @@ document.addEventListener('DOMContentLoaded', () => {
     delay: 0.15,
     ease: 'power3.out',
   });
+
+  const lightbox = document.getElementById('gallery-lightbox');
+  const galleryItems = [...document.querySelectorAll('.gallery-item')];
+
+  if (lightbox && galleryItems.length) {
+    const lightboxImage = lightbox.querySelector('.lightbox-image');
+    const lightboxCaption = lightbox.querySelector('.lightbox-caption');
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    const prevBtn = lightbox.querySelector('.lightbox-prev');
+    const nextBtn = lightbox.querySelector('.lightbox-next');
+    let currentIndex = 0;
+
+    const slides = galleryItems.map((item) => {
+      const img = item.querySelector('img');
+      const caption = item.querySelector('.gallery-caption');
+      return {
+        src: img?.getAttribute('src') ?? '',
+        alt: img?.getAttribute('alt') ?? '',
+        caption: caption?.textContent ?? '',
+      };
+    });
+
+    const renderSlide = (index) => {
+      const slide = slides[index];
+      if (!slide) return;
+      currentIndex = index;
+      lightboxImage.src = slide.src;
+      lightboxImage.alt = slide.alt;
+      lightboxCaption.textContent = slide.caption;
+    };
+
+    const openLightbox = (index) => {
+      renderSlide(index);
+      lightbox.hidden = false;
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    const closeLightbox = () => {
+      lightbox.hidden = true;
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lightboxImage.removeAttribute('src');
+    };
+
+    const showNext = () => renderSlide((currentIndex + 1) % slides.length);
+    const showPrev = () => renderSlide((currentIndex - 1 + slides.length) % slides.length);
+
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', () => openLightbox(index));
+    });
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    nextBtn?.addEventListener('click', showNext);
+    prevBtn?.addEventListener('click', showPrev);
+
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (lightbox.hidden) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowRight') showNext();
+      if (event.key === 'ArrowLeft') showPrev();
+    });
+  }
 });
